@@ -6,160 +6,179 @@ import base64
 st.set_page_config(
     page_title="Аналитика для развития г. Алматы",
     page_icon="🏙️",
-    layout="wide"
+    layout="centered"
 )
 
-# Загрузим картинку для баннера
-with open("banner.jpg", "rb") as image_file:
-    encoded_image = base64.b64encode(image_file.read()).decode()
+# Загрузим изображение для фона
+with open("background.jpeg", "rb") as image_file:
+    encoded_background = base64.b64encode(image_file.read()).decode()
 
-# Определим изображения для кнопок
-images = {
-    "Безопасность": "безопасность.png",
-    "Бизнес": "финансы.png",
-    "Благоустройство": "Благоустройство.png",
-    "Досуг и развитие": "Экономика.png",
-    "Недвижимость": "будущее.png",
-    "Полицентричное развитие": "будущее.png",
-    "Рабочие места": "бизнес.png",
-    "Социальные объекты": "будущее.png",
-    "Участки реновации": "Экономика.png"
+page_element = """
+<style>
+[data-testid="stAppViewContainer"]{
+    background-image: url("https://i.ibb.co.com/MfCbbPM/DALL-E-2024-05-02-17-52-04-Wide-horizontal-image-for-an-app-cover-capturing-a-serene-summer-park-sce.jpg");
+    background-size: cover;
+}
+[data-testid="stHeader"]{
+    background-color: rgba(0,0,0,0);
+}
+[data-testid="stToolbar"]{
+    right: 2rem;
+    background-image: url("https://cdn.iconscout.com/icon/free/png-256/hamburger-menu-462145.png");
+    background-size: cover;
+}
+</style>
+"""
+st.markdown(page_element, unsafe_allow_html=True)
+
+# Определим изображения для кнопок и ссылки
+buttons = {
+    "Безопасность": {"image": "безопасность.png", "url": "https://deep-analytics.smartalmaty.kz/"},
+    "Бизнес": {"image": "финансы.png", "url": "https://deep-analytics.smartalmaty.kz/"},
+    "Благоустройство": {"image": "Благоустройство.png", "url": "https://deep-analytics.smartalmaty.kz/"},
+    "Участки реновации": {"image": "Экономика.png", "url": "https://deep-analytics.smartalmaty.kz/"}
 }
 
 encoded_images = {}
-for name, file in images.items():
-    with open(file, "rb") as image_file:
+for name, info in buttons.items():
+    with open(info["image"], "rb") as image_file:
         encoded_images[name] = base64.b64encode(image_file.read()).decode()
 
-# HTML и CSS для более современного дизайна с градиентом, анимацией и выпадающими списками
+# background: linear-gradient(to bottom, #83a4d4, #b6fbff), url('data:image/jpeg;base64,{encoded_background}') no-repeat center center fixed;
+# background: url('data:image/png;base64,{encoded_background}') no-repeat center center fixed;
+
+
+# HTML и CSS для главной страницы
 html_code = f"""
 <!DOCTYPE html>
 <html>
 <head>
     <style>
-        body {{
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #83a4d4, #b6fbff);
-            color: #202021;
+        html, body {{
+            height: 100%;
             margin: 0;
             padding: 0;
+            overflow: hidden;
         }}
-        .container {{
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
+        body {{
+            font-family: 'Arial', sans-serif;
+            background-color: rgba(255, 255, 255, 0.5); /* Полупрозрачный фон */
+            background-size: cover;
+            color: #202021;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            background-color: transparent;
         }}
         .header {{
-            text-align: center;
-            margin-bottom: 2rem;
+            margin-top: 2rem;
+            margin-left: 16rem;
+            background-color: rgba(81, 112, 98, 0.3); /* Полупрозрачный фон */
+            padding: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }}
         .header h1 {{
             font-size: 3rem;
-            color: #fff;
+            color: #e3ffff;
             margin: 0;
         }}
         .header p {{
-            font-size: 1.25rem;
-            color: #f0f0f0;
+            font-size: 1.5rem;
+            color: #e3ffff;
+            margin: 0;
         }}
-        .banner {{
-            background-image: url('data:image/png;base64,{encoded_image}');
-            background-size: cover;
-            background-position: center;
-            height: 300px;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-        }}
-        .directions {{
-            text-align: center;
-            margin-bottom: 2rem;
-        }}
-        .directions h2 {{
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #fff;
-        }}
-        .direction-buttons {{
+                .direction-buttons {{
             display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: flex-start;
             gap: 1rem;
+            margin-bottom: 2rem;
+            position: absolute;
+            bottom: 10%;
+            left: 10%;
         }}
         .direction-button {{
-            flex: 1;
-            margin: 0.5rem;
-            padding: 1.5rem;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            width: 150px;
+            height: 150px;
+            background-color: rgba(0, 162, 255, 0.5); /* Полупрозрачный голубой фон */
+            border-radius: 50%; /* Круглые кнопки */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            font-size: 1rem;
-            font-weight: bold;
-            text-decoration: none;
-            color: #183F71;
             cursor: pointer;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
+            position: relative;
+            margin-left: calc(10% * var(--step));
+            text-decoration: none; /* Убираем подчеркивание */
         }}
         .direction-button img {{
-            width: 30px;
-            height: 30px;
-            margin-right: 10px;
+            width: 60%;
+            height: 60%;
+        }}
+        .direction-button span {{
+            margin-top: 0.5rem;
+            color: #fff;
+            font-weight: bold;
         }}
         .direction-button:hover {{
-            transform: translateY(-10px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }}
-        .cases {{
-            text-align: center;
-            margin-bottom: 2rem;
-        }}
-        .cases h2 {{
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+        .tooltip {{
+            visibility: hidden;
+            width: 150px;
+            background-color: #183F71;
             color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            top: 50%;
+            left: 110%;
+            margin-left: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }}
+        .direction-button:hover .tooltip {{
+            visibility: visible;
+            opacity: 1;
         }}
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Аналитика для развития г. Алматы</h1>
-            <p>Современный цифровой хаб для эффективного управления городом и улучшения качества жизни его жителей.</p>
-        </div>
-        <div class="banner"></div>
-        <div class="directions">
-            <h2>Направления</h2>
-            <div class="direction-buttons">
+    <div class="header">
+        <h1>AlmatyAnalytics</h1>
+        <p>Принятие решений на основе данных</p>
+    </div>
+    <div class="spacer"></div>
+    <div class="direction-buttons">
 """
 
-# Добавим кнопки в HTML код
-for name, encoded_img in encoded_images.items():
+# Добавим кнопки в HTML код с применением каскадного шага для лестницы
+step = 0
+for name, info in buttons.items():
     html_code += f"""
-                <a href="/{name.lower()}" class="direction-button">
-                    <img src="data:image/png;base64,{encoded_img}" alt="{name}"/>
-                    {name}
+                <a href="{info['url']}" class="direction-button" style="--step: {step}" title="{name}">
+                    <img src="data:image/png;base64,{encoded_images[name]}" alt="{name}"/>
+                    <span>{name}</span>
+                    <div class="tooltip">{name}</div>
                 </a>
     """
+    step += 1
 
 html_code += """
-            </div>
-        </div>
-        <div class="cases">
-            <h2>Карта города</h2>
-            <div id="map"></div>
-        </div>
     </div>
 </body>
 </html>
 """
 
 # Встраивание HTML и CSS в Streamlit с использованием streamlit.components.v1
-components.html(html_code, height=1200)
-
-# Встраивание карты из файла map.html
-with open("map.html", 'r', encoding='utf-8') as file:
-    map_html = file.read()
-components.html(map_html, height=600)
+components.html(html_code, height=1000)
