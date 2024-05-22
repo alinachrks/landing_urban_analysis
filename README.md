@@ -12,11 +12,11 @@ AlmatyAnalytics is a modern digital hub designed to facilitate effective city ma
 
 1. Clone this repository to your local machine.
     ```bash
-    git clone https://github.com/yourusername/AlmatyAnalytics.git
+    git clone https://github.com/alinachrks/landing_urban_analysis.git
     ```
 2. Change the directory to the project folder.
     ```bash
-    cd AlmatyAnalytics
+    cd landing_urban_analysis
     ```
 3. Install the required dependencies.
     ```bash
